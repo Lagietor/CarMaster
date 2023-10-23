@@ -1,4 +1,4 @@
-package App.carMaster.entities;
+package App.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,22 +17,23 @@ public class Car {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Integer user;
 
     private String company;
     private String generation;
     private Float price;
-    private String state; // nowy/używany
+    private String state; // nowy lub używany
     private String color;
     private Integer numOfDoors;
     private Float weight;
     private String fuelType;
+    private Integer horsePower;
 
 
     public Car() {
     }
 
-    public Car(Integer id, User user, String company, String generation, Float price, String state, String color, Integer numOfDoors, Float weight, String fuelType) {
+    public Car(Integer id, Integer user, String company, String generation, Float price, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower) {
         this.id = id;
         this.user = user;
         this.company = company;
@@ -43,6 +44,7 @@ public class Car {
         this.numOfDoors = numOfDoors;
         this.weight = weight;
         this.fuelType = fuelType;
+        this.horsePower = horsePower;
     }
 
     public Integer getId() {
@@ -53,11 +55,11 @@ public class Car {
         this.id = id;
     }
 
-    public User getUser() {
+    public Integer getUser() {
         return this.user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Integer user) {
         this.user = user;
     }
 
@@ -125,12 +127,20 @@ public class Car {
         this.fuelType = fuelType;
     }
 
+    public Integer getHorsePower() {
+        return this.horsePower;
+    }
+
+    public void setHorsePower(Integer horsePower) {
+        this.horsePower = horsePower;
+    }
+
     public Car id(Integer id) {
         setId(id);
         return this;
     }
 
-    public Car user(User user) {
+    public Car user(Integer user) {
         setUser(user);
         return this;
     }
@@ -175,6 +185,11 @@ public class Car {
         return this;
     }
 
+    public Car horsePower(Integer horsePower) {
+        setHorsePower(horsePower);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -183,7 +198,12 @@ public class Car {
             return false;
         }
         Car car = (Car) o;
-        return Objects.equals(id, car.id) && Objects.equals(user, car.user) && Objects.equals(company, car.company) && Objects.equals(generation, car.generation) && Objects.equals(price, car.price) && Objects.equals(state, car.state) && Objects.equals(color, car.color) && Objects.equals(numOfDoors, car.numOfDoors) && Objects.equals(weight, car.weight) && Objects.equals(fuelType, car.fuelType);
+        return Objects.equals(id, car.id) && Objects.equals(user, car.user) && Objects.equals(company, car.company) && Objects.equals(generation, car.generation) && Objects.equals(price, car.price) && Objects.equals(state, car.state) && Objects.equals(color, car.color) && Objects.equals(numOfDoors, car.numOfDoors) && Objects.equals(weight, car.weight) && Objects.equals(fuelType, car.fuelType) && Objects.equals(horsePower, car.horsePower);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, company, generation, price, state, color, numOfDoors, weight, fuelType, horsePower);
     }
 
     @Override
@@ -199,7 +219,8 @@ public class Car {
             ", numOfDoors='" + getNumOfDoors() + "'" +
             ", weight='" + getWeight() + "'" +
             ", fuelType='" + getFuelType() + "'" +
+            ", horsePower='" + getHorsePower() + "'" +
             "}";
     }
-    
+
 }

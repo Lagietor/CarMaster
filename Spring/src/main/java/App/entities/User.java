@@ -1,11 +1,13 @@
-package App.carMaster.entities;
+package App.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,8 +24,8 @@ public class User {
     private String password;
     private String profile;
 
-    @OneToMany(mappedBy = "user")
-    private List<Car> cars;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Car> cars = new ArrayList<Car>();
 
 
     public User() {
