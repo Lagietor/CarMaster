@@ -1,0 +1,8 @@
+// override theme variables
+$primary: #E19898;
+$secondary: #A2678A;
+$info: #4D3C77;
+$dark: #3F1D38;
+
+// import bootstrap styles at the bottom!
+@import '../node_modules/bootstrap/scss/bootstrap.scss';

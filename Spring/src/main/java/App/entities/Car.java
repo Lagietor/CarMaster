@@ -17,7 +17,7 @@ public class Car {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Integer user;
+    private User user;
 
     private String company;
     private String generation;
@@ -33,7 +33,7 @@ public class Car {
     public Car() {
     }
 
-    public Car(Integer id, Integer user, String company, String generation, Float price, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower) {
+    public Car(Integer id, User user, String company, String generation, Float price, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower) {
         this.id = id;
         this.user = user;
         this.company = company;
@@ -55,11 +55,11 @@ public class Car {
         this.id = id;
     }
 
-    public Integer getUser() {
+    public User getUser() {
         return this.user;
     }
 
-    public void setUser(Integer user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -140,7 +140,7 @@ public class Car {
         return this;
     }
 
-    public Car user(Integer user) {
+    public Car user(User user) {
         setUser(user);
         return this;
     }

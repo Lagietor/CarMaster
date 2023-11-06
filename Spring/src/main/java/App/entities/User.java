@@ -25,7 +25,7 @@ public class User {
     private String profile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Car> cars = new ArrayList<Car>();
+    private List<Car> cars;
 
 
     public User() {

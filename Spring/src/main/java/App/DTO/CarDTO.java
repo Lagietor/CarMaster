@@ -13,6 +13,19 @@ public class CarDTO {
     private Integer horsePower;
 
 
+    public CarDTO(Integer userId, String company, String generation, Float price, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower) {
+        this.userId = userId;
+        this.company = company;
+        this.generation = generation;
+        this.price = price;
+        this.state = state;
+        this.color = color;
+        this.numOfDoors = numOfDoors;
+        this.weight = weight;
+        this.fuelType = fuelType;
+        this.horsePower = horsePower;
+    }
+
     public Integer getUserId() {
         return this.userId;
     }
