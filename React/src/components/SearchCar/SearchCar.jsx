@@ -1,7 +1,16 @@
+import { useState } from "react";
+import { Collapse } from "react-collapse";
+import "./SearchCar.css";
 import { CaretDownFill } from "react-bootstrap-icons";
 import { CaretUpFill } from "react-bootstrap-icons";
 
 function SearchCar (props) {
+    const [filtersVisibility, setFiltersVisibility] = useState(false);
+
+    function changeFiltersVisibility() {
+        setFiltersVisibility(!filtersVisibility);
+    }
+
     return (
         <div className="container bg-dark rounded mt-3 w-75">
             <form className="form-inline">
@@ -18,35 +27,43 @@ function SearchCar (props) {
                     </div>
                 </div>
                 <div className="d-flex justify-content-center pt-1">
-                    <a><CaretDownFill color="#E19898"/></a>
+                    <a onClick={changeFiltersVisibility} className="slider">
+                        {filtersVisibility ? (
+                            <CaretUpFill color="#E19898" />
+                        ) : (
+                            <CaretDownFill color="#E19898" />
+                        )}
+                    </a>
                 </div>
-                <div className="row justify-content-between my-3" hidden>
-                    <div className="col ms-4 mx-2">
-                        <p className="text-light h6 text-center">Price</p> 
-                        <div className="row justify-content-between">
-                            <input type="text" className="col form-control bg-secondary border-dark me-2" placeholder="from" />
-                            <input type="text" className="col form-control bg-secondary border-dark ms-2" placeholder="to" />
+                <Collapse isOpened={filtersVisibility}>
+                    <div className="row justify-content-between my-3">
+                        <div className="col ms-4 mx-2">
+                            <p className="text-light h6 text-center">Price</p> 
+                            <div className="row justify-content-between">
+                                <input type="text" className="col form-control bg-secondary border-dark me-2" placeholder="from" />
+                                <input type="text" className="col form-control bg-secondary border-dark ms-2" placeholder="to" />
+                            </div>
+                        </div>
+                        <div className="col mx-2 mb-3">
+                            <p className="text-light h6 text-center">Fuel Type</p>
+                            <select className="form-select bg-secondary border-dark">
+                                <option defaultValue="regular_petrol">Regular petrol</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="electric">Electric</option>
+                                <option value="hydrogen">Hydrogen</option>
+                            </select>
+                        </div>
+                        <div className="col mx-2 mb-3">
+                            <p className="text-light h6 text-center">Filter</p>
+                            <select className="form-select bg-secondary border-dark">
+                                <option defaultValue="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                                <option value="cheapiest">Chiepiest</option>
+                                <option value="most_expensive">Most expensive</option>
+                            </select>
                         </div>
                     </div>
-                    <div className="col mx-2 mb-3">
-                        <p className="text-light h6 text-center">Fuel Type</p>
-                        <select className="form-select bg-secondary border-dark">
-                            <option defaultValue="regular_petrol">Regular petrol</option>
-                            <option value="diesel">Diesel</option>
-                            <option value="electric">Electric</option>
-                            <option value="hydrogen">Hydrogen</option>
-                        </select>
-                    </div>
-                    <div className="col mx-2 mb-3">
-                        <p className="text-light h6 text-center">Filter</p>
-                        <select className="form-select bg-secondary border-dark">
-                            <option defaultValue="newest">Newest</option>
-                            <option value="oldest">Oldest</option>
-                            <option value="cheapiest">Chiepiest</option>
-                            <option value="most_expensive">Most expensive</option>
-                        </select>
-                    </div>
-                </div>
+                </Collapse>
             </form>
         </div>
     );

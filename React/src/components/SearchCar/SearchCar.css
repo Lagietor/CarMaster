@@ -1,0 +1,7 @@
+.ReactCollapse--collapse {
+    transition: height 500ms;
+  }
+
+.slider:hover {
+    cursor: pointer;
+}
