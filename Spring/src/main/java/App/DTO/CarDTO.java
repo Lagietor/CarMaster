@@ -1,37 +1,31 @@
 package App.DTO;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
+import App.entities.User;
+
 public class CarDTO {
-    private Integer userId;
+    private User user;
     private String company;
     private String generation;
-    private Float price;
+    private Long price;
+    private String description;
+    private String shortDescription;
     private String state;
     private String color;
     private Integer numOfDoors;
     private Float weight;
     private String fuelType;
     private Integer horsePower;
-
-
-    public CarDTO(Integer userId, String company, String generation, Float price, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower) {
-        this.userId = userId;
-        this.company = company;
-        this.generation = generation;
-        this.price = price;
-        this.state = state;
-        this.color = color;
-        this.numOfDoors = numOfDoors;
-        this.weight = weight;
-        this.fuelType = fuelType;
-        this.horsePower = horsePower;
-    }
+    private String image;
 
     public Integer getUserId() {
-        return this.userId;
+        return this.user.getId();
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getCompany() {
@@ -50,12 +44,37 @@ public class CarDTO {
         this.generation = generation;
     }
 
-    public Float getPrice() {
-        return this.price;
+    public String getPrice() {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator(' ');
+
+        DecimalFormat df = new DecimalFormat("#,###", symbols);
+        return df.format(this.price);
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+        setShortDescription();
+    }
+
+    public String getShortDescription() {
+        return this.shortDescription;
+    }
+
+    public void setShortDescription() {
+        if (description != null && description.length() > 100) {
+            this.shortDescription = description.substring(0, 100) + "...";
+        } else {
+            this.shortDescription = description;
+        }
     }
 
     public String getState() {
@@ -104,5 +123,13 @@ public class CarDTO {
 
     public void setHorsePower(Integer horsePower) {
         this.horsePower = horsePower;
+    }
+
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

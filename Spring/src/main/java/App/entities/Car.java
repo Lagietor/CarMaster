@@ -21,30 +21,34 @@ public class Car {
 
     private String company;
     private String generation;
-    private Float price;
-    private String state; // nowy lub używany
+    private Long price;
+    private String description;
+    private String state;
     private String color;
     private Integer numOfDoors;
     private Float weight;
     private String fuelType;
     private Integer horsePower;
+    private String image;
 
 
     public Car() {
     }
 
-    public Car(Integer id, User user, String company, String generation, Float price, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower) {
+    public Car(Integer id, User user, String company, String generation, Long price, String description, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower, String image) {
         this.id = id;
         this.user = user;
         this.company = company;
         this.generation = generation;
         this.price = price;
+        this.description = description;
         this.state = state;
         this.color = color;
         this.numOfDoors = numOfDoors;
         this.weight = weight;
         this.fuelType = fuelType;
         this.horsePower = horsePower;
+        this.image = image;
     }
 
     public Integer getId() {
@@ -79,12 +83,20 @@ public class Car {
         this.generation = generation;
     }
 
-    public Float getPrice() {
+    public Long getPrice() {
         return this.price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getState() {
@@ -135,6 +147,14 @@ public class Car {
         this.horsePower = horsePower;
     }
 
+    public String getimage() {
+        return this.image;
+    }
+
+    public void setimage(String image) {
+        this.image = image;
+    }
+
     public Car id(Integer id) {
         setId(id);
         return this;
@@ -155,8 +175,13 @@ public class Car {
         return this;
     }
 
-    public Car price(Float price) {
+    public Car price(Long price) {
         setPrice(price);
+        return this;
+    }
+
+    public Car description(String description) {
+        setDescription(description);
         return this;
     }
 
@@ -190,6 +215,11 @@ public class Car {
         return this;
     }
 
+    public Car image(String image) {
+        setimage(image);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -198,12 +228,12 @@ public class Car {
             return false;
         }
         Car car = (Car) o;
-        return Objects.equals(id, car.id) && Objects.equals(user, car.user) && Objects.equals(company, car.company) && Objects.equals(generation, car.generation) && Objects.equals(price, car.price) && Objects.equals(state, car.state) && Objects.equals(color, car.color) && Objects.equals(numOfDoors, car.numOfDoors) && Objects.equals(weight, car.weight) && Objects.equals(fuelType, car.fuelType) && Objects.equals(horsePower, car.horsePower);
+        return Objects.equals(id, car.id) && Objects.equals(user, car.user) && Objects.equals(company, car.company) && Objects.equals(generation, car.generation) && Objects.equals(price, car.price) && Objects.equals(description, car.description) && Objects.equals(state, car.state) && Objects.equals(color, car.color) && Objects.equals(numOfDoors, car.numOfDoors) && Objects.equals(weight, car.weight) && Objects.equals(fuelType, car.fuelType) && Objects.equals(horsePower, car.horsePower) && Objects.equals(image, car.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, company, generation, price, state, color, numOfDoors, weight, fuelType, horsePower);
+        return Objects.hash(id, user, company, generation, price, description, state, color, numOfDoors, weight, fuelType, horsePower, image);
     }
 
     @Override
@@ -214,13 +244,15 @@ public class Car {
             ", company='" + getCompany() + "'" +
             ", generation='" + getGeneration() + "'" +
             ", price='" + getPrice() + "'" +
+            ", description='" + getDescription() + "'" +
             ", state='" + getState() + "'" +
             ", color='" + getColor() + "'" +
             ", numOfDoors='" + getNumOfDoors() + "'" +
             ", weight='" + getWeight() + "'" +
             ", fuelType='" + getFuelType() + "'" +
             ", horsePower='" + getHorsePower() + "'" +
+            ", image='" + getimage() + "'" +
             "}";
     }
-
+    
 }

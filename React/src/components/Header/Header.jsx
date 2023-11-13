@@ -1,4 +1,4 @@
-import logo from '../../assets/cludatte.png'
+import logo from '../../../public/logo.png'
 
 function Header (props) {
     return (

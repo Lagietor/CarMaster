@@ -39,9 +39,10 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> addUser(@RequestBody User user) {
-        if (this.userRepository.findByEmail(user.getEmail()) != null) {
-            return new ResponseEntity<>("There is already user with this email", HttpStatus.CONFLICT);
-        }
+        // if (this.userRepository.findByEmail(user.getEmail()) != null) {
+        //     return new ResponseEntity<>("There is already user with this email", HttpStatus.CONFLICT);
+        // }
+        // TODO: do naprawy
 
         this.userRepository.save(user);
         return new ResponseEntity<>("User was successfully added", HttpStatus.CREATED);
