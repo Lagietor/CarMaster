@@ -54,7 +54,7 @@ function CarCard (props) {
                     </div>
                 )):
                 <div className="spinner-border text-primary justify-content-center" role="status">
-                    <span className="sr-only">Loading...</span>
+                    <span className="sr-only">Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...</span>
                 </div>
             }
         </div>

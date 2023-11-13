@@ -5,7 +5,6 @@ import SearchCar from './components/SearchCar/SearchCar';
 import CarCard from './components/CarCard/CarCard';
 
 function App() {
-
 	return (
 		<>
 			<Header />

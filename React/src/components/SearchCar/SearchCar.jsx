@@ -1,15 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Collapse } from "react-collapse";
 import "./SearchCar.css";
 import { CaretDownFill } from "react-bootstrap-icons";
 import { CaretUpFill } from "react-bootstrap-icons";
+import axios from "axios";
 
 function SearchCar (props) {
     const [filtersVisibility, setFiltersVisibility] = useState(false);
+    const [carCompanies, setCarCompanies] = useState(null);
 
     function changeFiltersVisibility() {
         setFiltersVisibility(!filtersVisibility);
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/car/companies");
+                setCarCompanies(response.data);
+            } catch (error) {
+                console.error("error: ", error);
+            }
+        }
+
+        fetchData();
+    }, []);
 
     return (
         <div className="container bg-dark rounded mt-3 w-75">
@@ -17,9 +32,12 @@ function SearchCar (props) {
                 <div className="row px-3 pt-3">
                     <select className="form-select col mx-4 bg-secondary border-dark">
                         <option defaultValue="none">Car company</option>
-                        <option value="BWM">BMW</option>
-                        <option value="Toyota">Toyota</option>
-                        <option value="Mercedes">Mercedes</option>
+                        {carCompanies ?
+                            carCompanies.map((company, index) => (
+                                <option value={company} key={index}>{company}</option>
+                            )) :
+                            <option>Loading...</option>
+                        }
                     </select>
                     <div className="row col">
                         <input type="text" className="form-control col ms-4 me-3 bg-secondary border-dark" placeholder="Car model" />

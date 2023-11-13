@@ -65,6 +65,11 @@ public class CarController {
         return ResponseEntity.ok(carDTO);
     }
 
+    @GetMapping("/companies")
+    public ResponseEntity<List<String>> getAllAvailableCarCompanies() {
+        return ResponseEntity.ok(this.carRepository.getAllCompanies());
+    }
+
     @PostMapping
     public ResponseEntity<?> createCar(@RequestBody Car car) {
         User user = car.getUser();
