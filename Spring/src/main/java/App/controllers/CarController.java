@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import App.DTO.CarDTO;
+import App.classes.PageResponse;
 import App.entities.Car;
 import App.entities.User;
 import App.repositories.CarRepository;
@@ -63,6 +66,23 @@ public class CarController {
         CarDTO carDTO = new CarDTO();
         BeanUtils.copyProperties(carOptional.get(), carDTO);
         return ResponseEntity.ok(carDTO);
+    }
+
+    @GetMapping("/page/{pageNr}")
+    public ResponseEntity<PageResponse<CarDTO>> getCarsByPage(@PathVariable("pageNr") Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, 3);
+        Page<Car> carsPage = this.carRepository.findAll(pageRequest);
+
+        List<CarDTO> carDTOs = new ArrayList<>();
+        for (Car car : carsPage) {
+            CarDTO carDTO = new CarDTO();
+            BeanUtils.copyProperties(car, carDTO);
+            carDTOs.add(carDTO);
+        }
+
+        PageResponse<CarDTO> response = new PageResponse<>(carDTOs, carsPage.getTotalElements(), page, carsPage.getTotalPages());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/companies")

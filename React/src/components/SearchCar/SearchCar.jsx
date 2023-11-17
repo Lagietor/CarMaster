@@ -16,8 +16,8 @@ function SearchCar (props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/car/companies");
-                setCarCompanies(response.data);
+                const { data } = await axios.get("http://localhost:8080/car/companies");
+                setCarCompanies(data);
             } catch (error) {
                 console.error("error: ", error);
             }
