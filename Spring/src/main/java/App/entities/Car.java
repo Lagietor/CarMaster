@@ -6,7 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import java.time.Instant;
 import java.util.Objects;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class Car {
@@ -20,8 +25,8 @@ public class Car {
     private User user;
 
     private String company;
-    private String generation;
-    private Long price;
+    private String model;
+    private double price;
     private String description;
     private String state;
     private String color;
@@ -31,15 +36,21 @@ public class Car {
     private Integer horsePower;
     private String image;
 
+    @CreationTimestamp
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    private Instant updatetedAt;
+    
 
     public Car() {
     }
 
-    public Car(Integer id, User user, String company, String generation, Long price, String description, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower, String image) {
+    public Car(Integer id, User user, String company, String model, double price, String description, String state, String color, Integer numOfDoors, Float weight, String fuelType, Integer horsePower, String image, Instant createdAt, Instant updatetedAt) {
         this.id = id;
         this.user = user;
         this.company = company;
-        this.generation = generation;
+        this.model = model;
         this.price = price;
         this.description = description;
         this.state = state;
@@ -49,6 +60,8 @@ public class Car {
         this.fuelType = fuelType;
         this.horsePower = horsePower;
         this.image = image;
+        this.createdAt = createdAt;
+        this.updatetedAt = updatetedAt;
     }
 
     public Integer getId() {
@@ -75,19 +88,19 @@ public class Car {
         this.company = company;
     }
 
-    public String getGeneration() {
-        return this.generation;
+    public String getModel() {
+        return this.model;
     }
 
-    public void setGeneration(String generation) {
-        this.generation = generation;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    public Long getPrice() {
+    public double getPrice() {
         return this.price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -147,12 +160,28 @@ public class Car {
         this.horsePower = horsePower;
     }
 
-    public String getimage() {
+    public String getImage() {
         return this.image;
     }
 
-    public void setimage(String image) {
+    public void setImage(String image) {
         this.image = image;
+    }
+
+    public Instant getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatetedAt() {
+        return this.updatetedAt;
+    }
+
+    public void setUpdatetedAt(Instant updatetedAt) {
+        this.updatetedAt = updatetedAt;
     }
 
     public Car id(Integer id) {
@@ -170,12 +199,12 @@ public class Car {
         return this;
     }
 
-    public Car generation(String generation) {
-        setGeneration(generation);
+    public Car model(String model) {
+        setModel(model);
         return this;
     }
 
-    public Car price(Long price) {
+    public Car price(double price) {
         setPrice(price);
         return this;
     }
@@ -216,7 +245,17 @@ public class Car {
     }
 
     public Car image(String image) {
-        setimage(image);
+        setImage(image);
+        return this;
+    }
+
+    public Car createdAt(Instant createdAt) {
+        setCreatedAt(createdAt);
+        return this;
+    }
+
+    public Car updatetedAt(Instant updatetedAt) {
+        setUpdatetedAt(updatetedAt);
         return this;
     }
 
@@ -228,12 +267,12 @@ public class Car {
             return false;
         }
         Car car = (Car) o;
-        return Objects.equals(id, car.id) && Objects.equals(user, car.user) && Objects.equals(company, car.company) && Objects.equals(generation, car.generation) && Objects.equals(price, car.price) && Objects.equals(description, car.description) && Objects.equals(state, car.state) && Objects.equals(color, car.color) && Objects.equals(numOfDoors, car.numOfDoors) && Objects.equals(weight, car.weight) && Objects.equals(fuelType, car.fuelType) && Objects.equals(horsePower, car.horsePower) && Objects.equals(image, car.image);
+        return Objects.equals(id, car.id) && Objects.equals(user, car.user) && Objects.equals(company, car.company) && Objects.equals(model, car.model) && price == car.price && Objects.equals(description, car.description) && Objects.equals(state, car.state) && Objects.equals(color, car.color) && Objects.equals(numOfDoors, car.numOfDoors) && Objects.equals(weight, car.weight) && Objects.equals(fuelType, car.fuelType) && Objects.equals(horsePower, car.horsePower) && Objects.equals(image, car.image) && Objects.equals(createdAt, car.createdAt) && Objects.equals(updatetedAt, car.updatetedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, company, generation, price, description, state, color, numOfDoors, weight, fuelType, horsePower, image);
+        return Objects.hash(id, user, company, model, price, description, state, color, numOfDoors, weight, fuelType, horsePower, image, createdAt, updatetedAt);
     }
 
     @Override
@@ -242,7 +281,7 @@ public class Car {
             " id='" + getId() + "'" +
             ", user='" + getUser() + "'" +
             ", company='" + getCompany() + "'" +
-            ", generation='" + getGeneration() + "'" +
+            ", model='" + getModel() + "'" +
             ", price='" + getPrice() + "'" +
             ", description='" + getDescription() + "'" +
             ", state='" + getState() + "'" +
@@ -251,8 +290,10 @@ public class Car {
             ", weight='" + getWeight() + "'" +
             ", fuelType='" + getFuelType() + "'" +
             ", horsePower='" + getHorsePower() + "'" +
-            ", image='" + getimage() + "'" +
+            ", image='" + getImage() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", updatetedAt='" + getUpdatetedAt() + "'" +
             "}";
     }
-    
+
 }

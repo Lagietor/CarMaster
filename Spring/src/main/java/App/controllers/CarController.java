@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,25 +14,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import App.DTO.CarDTO;
+import App.classes.CarFilter;
 import App.classes.PageResponse;
 import App.entities.Car;
 import App.entities.User;
 import App.repositories.CarRepository;
 import App.repositories.UserRepository;
+import App.services.CarService;
 
-@CrossOrigin(origins="http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/car")
 public class CarController {
     private final CarRepository carRepository;
     private final UserRepository userRepository;
+    private final CarService carService;
 
-    public CarController(CarRepository carRepository, UserRepository userRepository) {
+    public CarController(CarRepository carRepository, UserRepository userRepository, CarService carService) {
         this.carRepository = carRepository;
         this.userRepository = userRepository;
+        this.carService = carService;
     }
 
     @GetMapping
@@ -68,19 +71,14 @@ public class CarController {
         return ResponseEntity.ok(carDTO);
     }
 
-    @GetMapping("/page/{pageNr}")
-    public ResponseEntity<PageResponse<CarDTO>> getCarsByPage(@PathVariable("pageNr") Integer page) {
-        PageRequest pageRequest = PageRequest.of(page, 3);
-        Page<Car> carsPage = this.carRepository.findAll(pageRequest);
-
-        List<CarDTO> carDTOs = new ArrayList<>();
-        for (Car car : carsPage) {
-            CarDTO carDTO = new CarDTO();
-            BeanUtils.copyProperties(car, carDTO);
-            carDTOs.add(carDTO);
-        }
-
-        PageResponse<CarDTO> response = new PageResponse<>(carDTOs, carsPage.getTotalElements(), page, carsPage.getTotalPages());
+    @PostMapping("/filter")
+    public ResponseEntity<PageResponse<CarDTO>> getFilteredCarsByPage(
+            @RequestBody CarFilter filter,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "isFiltered", defaultValue = "false") boolean isFiltered
+        )
+    {
+        PageResponse<CarDTO> response = carService.getFilteredCars(filter, page);
 
         return ResponseEntity.ok(response);
     }

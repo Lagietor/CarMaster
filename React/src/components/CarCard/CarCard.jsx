@@ -8,7 +8,7 @@ function CarCard (props) {
         <div key={props.id}>
             <div className=" bg-dark rounded mt-2 p-3">
                 <div className="row justify-content-between">
-                    <p className="col-4 text-light h5 ps-4">{props.car.company + " " + props.car.generation}</p>
+                    <p className="col-4 text-light h5 ps-4">{props.car.company + " " + props.car.model}</p>
                     <p className="col-2 text-light h6 text-end">{props.car.state}<img src={(props.car.state == "New") ? newCarIcon : usedCarIcon} width="35" height="35" className="text-light ms-3"/></p>
                 </div>
                 <div className="row justify-content-between">

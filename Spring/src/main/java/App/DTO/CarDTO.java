@@ -2,14 +2,15 @@ package App.DTO;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.Instant;
 
 import App.entities.User;
 
 public class CarDTO {
     private User user;
     private String company;
-    private String generation;
-    private Long price;
+    private String model;
+    private double price;
     private String description;
     private String shortDescription;
     private String state;
@@ -19,6 +20,8 @@ public class CarDTO {
     private String fuelType;
     private Integer horsePower;
     private String image;
+    private Instant createdAt;
+    private Instant updatetedAt;
 
     public Integer getUserId() {
         return this.user.getId();
@@ -36,12 +39,12 @@ public class CarDTO {
         this.company = company;
     }
 
-    public String getGeneration() {
-        return this.generation;
+    public String getModel() {
+        return this.model;
     }
 
-    public void setGeneration(String generation) {
-        this.generation = generation;
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public String getPrice() {
@@ -52,7 +55,7 @@ public class CarDTO {
         return df.format(this.price);
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -131,5 +134,21 @@ public class CarDTO {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Instant getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return this.updatetedAt;
+    }
+
+    public void setUpdatetedAt(Instant updatetedAt) {
+        this.updatetedAt = updatetedAt;
     }
 }
