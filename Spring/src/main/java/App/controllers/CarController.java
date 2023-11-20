@@ -74,8 +74,7 @@ public class CarController {
     @PostMapping("/filter")
     public ResponseEntity<PageResponse<CarDTO>> getFilteredCarsByPage(
             @RequestBody CarFilter filter,
-            @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "isFiltered", defaultValue = "false") boolean isFiltered
+            @RequestParam(name = "page", defaultValue = "0") Integer page
         )
     {
         PageResponse<CarDTO> response = carService.getFilteredCars(filter, page);

@@ -6,29 +6,29 @@ import CarPagination from "../CarPagination/CarPagination";
 function CarsPanel (props) {
     const [carsData, setCarsData] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
+    const [currentFilteredData, setCurrentFilteredData] = useState(null);
 
     function changeCurrentPage(newCurrentPage) {
         setCurrentPage(newCurrentPage - 1);
     }
 
-    const fetchFilteredData = async (filteredData, currentPage) => {
+    const fetchFilteredData = async (newFilteredData, currentPage) => {
         try {
-            console.log(filteredData);
-            let isFiltered = false;
+            // console.log(newFilteredData);
 
-            if (Object.keys(filteredData).length !== 0) {
-                isFiltered = true;
-                // setCurrentPage(0);
+            if (newFilteredData != currentFilteredData) {
+                setCurrentPage(0);
+                setCurrentFilteredData(newFilteredData);
             }
 
-            const { data } = await axios.post(`http://localhost:8080/car/filter?page=${currentPage}&isFiltered=${isFiltered}`, filteredData);
+            const { data } = await axios.post(`http://localhost:8080/car/filter?page=${currentPage}`, newFilteredData);
             setCarsData(data);
         } catch (error) {
             console.error("error: ", error);
         }
     };
 
-    useEffect(() => {    
+    useEffect(() => {
         fetchFilteredData(props.filterData, currentPage);
     }, [currentPage, props.filterData]);
 

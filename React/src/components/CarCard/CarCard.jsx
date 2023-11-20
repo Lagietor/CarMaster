@@ -1,7 +1,7 @@
-import fuelElectricIcon from "../../../public/icons/fuelElectric.png";
-import fuelIcon from "../../../public/icons/fuel.png";
-import newCarIcon from "../../../public/icons/newCar.png";
-import usedCarIcon from "../../../public/icons/usedCar.png";
+import fuelElectricIcon from "../../assets/icons/fuelElectric.png";
+import fuelIcon from "../../assets/icons/fuel.png";
+import newCarIcon from "../../assets/icons/newCar.png";
+import usedCarIcon from "../../assets/icons/usedCar.png";
 
 function CarCard (props) {
     return (

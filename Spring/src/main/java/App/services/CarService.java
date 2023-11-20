@@ -24,27 +24,12 @@ public class CarService {
 
     public PageResponse<CarDTO> getFilteredCars(CarFilter filter, Integer page) {
         PageRequest pageRequest = PageRequest.of(page, 3);
-
         String sortOption = (filter.getSortFilter() == null) ? "newest" : filter.getSortFilter();
 
         List<Car> allCars = carRepository.findAllCarsSorted(sortOption);
+        List<CarDTO> filteredCarDTOs = filterData(allCars, filter);
 
-        List<CarDTO> filteredCarDTOs = allCars.stream()
-                .filter(s -> (filter.getCompany() == null) || (filter.getCompany() == "") || (s.getCompany() != null && s.getCompany().equalsIgnoreCase(filter.getCompany())))
-                .filter(s -> (filter.getModel() == null) || (filter.getModel() == "") || (s.getModel() != null && s.getModel().toLowerCase().contains(filter.getModel().toLowerCase())))
-                .filter(s -> filter.getPriceFrom() == null || s.getPrice() >= filter.getPriceFrom())
-                .filter(s -> filter.getPriceTo() == null || s.getPrice() <= filter.getPriceTo())
-                .filter(s -> (filter.getFuelType() == null) || (filter.getFuelType() == "") || (s.getFuelType() != null && s.getFuelType().equalsIgnoreCase(filter.getFuelType())))
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        // indeks początkowy elementów na stronie
-        int start = page * 3;
-
-        List<CarDTO> sublist = filteredCarDTOs.subList(start, Math.min(start + 3, filteredCarDTOs.size()));
-
-        Page<CarDTO> carDTOPage = new PageImpl<>(sublist, pageRequest, filteredCarDTOs.size());
-
+        Page<CarDTO> carDTOPage = changeListToPage(filteredCarDTOs, pageRequest, page);
         PageResponse<CarDTO> response = new PageResponse<>(
                 carDTOPage.getContent(),
                 carDTOPage.getTotalElements(),
@@ -74,5 +59,27 @@ public class CarService {
         carDTO.setUpdatetedAt(car.getUpdatetedAt());
 
         return carDTO;
+    }
+
+    private List<CarDTO> filterData(List<Car> allCars, CarFilter filter) {
+        List<CarDTO> filteredCarDTOs = allCars.stream()
+            .filter(s -> (filter.getCompany() == null) || (filter.getCompany() == "") || (s.getCompany() != null && s.getCompany().equalsIgnoreCase(filter.getCompany())))
+            .filter(s -> (filter.getModel() == null) || (filter.getModel() == "") || (s.getModel() != null && s.getModel().toLowerCase().contains(filter.getModel().toLowerCase())))
+            .filter(s -> filter.getPriceFrom() == null || s.getPrice() >= filter.getPriceFrom())
+            .filter(s -> filter.getPriceTo() == null || s.getPrice() <= filter.getPriceTo())
+            .filter(s -> (filter.getFuelType() == null) || (filter.getFuelType() == "") || (s.getFuelType() != null && s.getFuelType().equalsIgnoreCase(filter.getFuelType())))
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+
+        return filteredCarDTOs;
+    }
+
+    private Page<CarDTO> changeListToPage(List<CarDTO> filteredCarDTOs, PageRequest pageRequest, Integer pageNr) {
+        int start = pageNr * 3;
+
+        List<CarDTO> sublist = filteredCarDTOs.subList(start, Math.min(start + 3, filteredCarDTOs.size()));
+        Page<CarDTO> carDTOPage = new PageImpl<>(sublist, pageRequest, filteredCarDTOs.size());
+
+        return carDTOPage;
     }
 }
