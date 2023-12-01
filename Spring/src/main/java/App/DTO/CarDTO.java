@@ -7,6 +7,7 @@ import java.time.Instant;
 import App.entities.User;
 
 public class CarDTO {
+    private Integer id;
     private User user;
     private String company;
     private String model;
@@ -23,8 +24,16 @@ public class CarDTO {
     private Instant createdAt;
     private Instant updatetedAt;
 
-    public Integer getUserId() {
-        return this.user.getId();
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return this.user;
     }
 
     public void setUser(User user) {

@@ -2,8 +2,12 @@ import fuelElectricIcon from "../../assets/icons/fuelElectric.png";
 import fuelIcon from "../../assets/icons/fuel.png";
 import newCarIcon from "../../assets/icons/newCar.png";
 import usedCarIcon from "../../assets/icons/usedCar.png";
+import { useNavigate } from "react-router-dom";
 
 function CarCard (props) {
+    const navigate = useNavigate();
+    console.log(props.car);
+
     return (
         <div key={props.id}>
             <div className=" bg-dark rounded mt-2 p-3">
@@ -25,7 +29,7 @@ function CarCard (props) {
                                 <span className="col text-center mb-0 mt-3">Weight: {props.car.weight}kg</span>
                                 <span className="col text-center mb-0 mt-3">Price: {props.car.price} $</span>
                                 <div className="col-2">
-                                    <a href="#" className="btn btn-primary btn-lg"><b>Check</b></a>
+                                    <a onClick={() => navigate(`/car/${props.car.id}`)} className="btn btn-primary btn-lg"><b>Check</b></a>
                                 </div>
                             </div>
                         </div>

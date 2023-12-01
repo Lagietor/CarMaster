@@ -43,6 +43,7 @@ public class CarService {
     private CarDTO convertToDTO(Car car) {
         CarDTO carDTO = new CarDTO();
 
+        carDTO.setId(car.getId());
         carDTO.setUser(car.getUser());
         carDTO.setCompany(car.getCompany());
         carDTO.setModel(car.getModel());

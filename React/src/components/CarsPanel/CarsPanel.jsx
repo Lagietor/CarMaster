@@ -14,8 +14,6 @@ function CarsPanel (props) {
 
     const fetchFilteredData = async (newFilteredData, currentPage) => {
         try {
-            // console.log(newFilteredData);
-
             if (newFilteredData != currentFilteredData) {
                 setCurrentPage(0);
                 setCurrentFilteredData(newFilteredData);

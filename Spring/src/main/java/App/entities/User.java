@@ -16,10 +16,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String email;
     private String name;
     private String lastname;
-    private String nickname;
+    private String phoneNumber;
+    private String email;
+    private String username;
     private String password;
     private String profile;
 
@@ -30,12 +31,13 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String email, String name, String lastname, String nickname, String password, String profile, List<Car> cars) {
+    public User(Integer id, String name, String lastname, String phoneNumber, String email, String username, String password, String profile, List<Car> cars) {
         this.id = id;
-        this.email = email;
         this.name = name;
         this.lastname = lastname;
-        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.username = username;
         this.password = password;
         this.profile = profile;
         this.cars = cars;
@@ -47,14 +49,6 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getName() {
@@ -73,12 +67,28 @@ public class User {
         this.lastname = lastname;
     }
 
-    public String getNickname() {
-        return this.nickname;
+    public String getPhoneNumber() {
+        return this.phoneNumber;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -110,23 +120,28 @@ public class User {
         return this;
     }
 
-    public User email(String email) {
-        setEmail(email);
-        return this;
-    }
-
     public User name(String name) {
         setName(name);
         return this;
     }
 
-    public User Lastname(String lastname) {
+    public User lastname(String lastname) {
         setLastname(lastname);
         return this;
     }
 
-    public User nickname(String nickname) {
-        setNickname(nickname);
+    public User phoneNumber(String phoneNumber) {
+        setPhoneNumber(phoneNumber);
+        return this;
+    }
+
+    public User email(String email) {
+        setEmail(email);
+        return this;
+    }
+
+    public User username(String username) {
+        setUsername(username);
         return this;
     }
 
@@ -153,22 +168,23 @@ public class User {
             return false;
         }
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(name, user.name) && Objects.equals(lastname, user.lastname) && Objects.equals(nickname, user.nickname) && Objects.equals(password, user.password) && Objects.equals(profile, user.profile) && Objects.equals(cars, user.cars);
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(lastname, user.lastname) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(email, user.email) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(profile, user.profile) && Objects.equals(cars, user.cars);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(password);
+        return Objects.hash(id, name, lastname, phoneNumber, email, username, password, profile, cars);
     }
 
     @Override
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
-            ", email='" + getEmail() + "'" +
             ", name='" + getName() + "'" +
             ", lastname='" + getLastname() + "'" +
-            ", nickname='" + getNickname() + "'" +
+            ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", username='" + getUsername() + "'" +
             ", password='" + getPassword() + "'" +
             ", profile='" + getProfile() + "'" +
             ", cars='" + getCars() + "'" +

@@ -1,23 +1,25 @@
-import './App.css';
-import './custom.scss';
-import Header from './components/Header/Header'
-import SearchCar from './components/SearchCar/SearchCar';
-import CarsPanel from './components/CarsPanel/CarsPanel';
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import "./custom.scss";
+import Header from "./components/Header/Header"
+import Home from "./pages/Home";
+import CarDetails from "./pages/CarDetails";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import NotFound from "./pages/NotFound";
 
 function App() {
-	const [filterData, setFilterData] = useState({});
-
-	const handleFilterSubmit = (filterData) => {
-		setFilterData(filterData);
-	};
-
 	return (
-		<>
+		<BrowserRouter>
 			<Header />
-			<SearchCar  onFilterSubmit={handleFilterSubmit}/>
-			<CarsPanel filterData={filterData}/>
-		</>
+			<Routes>
+				<Route exact path="/" element={<Home />} />
+				<Route exact path="/login" element={<Login />} />
+				<Route exact path="/register" element={<Register />} />
+				<Route exact path="/car/:id" element={<CarDetails />} />
+				<Route path="*" element={<NotFound />} />
+			</Routes>
+		</BrowserRouter>
 	)
 }
 
