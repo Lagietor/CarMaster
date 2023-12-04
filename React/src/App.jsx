@@ -7,6 +7,9 @@ import CarDetails from "./pages/CarDetails";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import NotFound from "./pages/NotFound";
+import UserProfile from "./pages/Profile/UserProfile";
+import UserProfileEdit from "./pages/Profile/UserProfileEdit";
+import UserChangePassword from "./pages/Profile/UserChangePassword";
 
 function App() {
 	return (
@@ -16,6 +19,9 @@ function App() {
 				<Route exact path="/" element={<Home />} />
 				<Route exact path="/login" element={<Login />} />
 				<Route exact path="/register" element={<Register />} />
+				<Route exact path="/profile" element={<UserProfile />} />
+				<Route exact path="/profile/edit" element={<UserProfileEdit />} />
+				<Route exact path="/profile/changePassword" element={<UserChangePassword />} />
 				<Route exact path="/car/:id" element={<CarDetails />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>

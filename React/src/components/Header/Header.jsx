@@ -1,8 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png"
+import { useUser } from "../../customHooks/useUser";
 
 function Header (props) {
     const navigate = useNavigate();
+    const { user, isAuth } = useUser();
+
+    function logout() {
+        window.localStorage.removeItem("authToken");
+        navigate("/");
+    }
 
     return (
         <nav className="navbar navbar-expand-lg bg-dark py-0">
@@ -14,17 +21,37 @@ function Header (props) {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav me-auto mb-lg-0 mx-2">
-                    <li className="nav-item">
-                        <a className="nav-link text-light mx-2" href="" onClick={() => navigate("/")}>Home</a>
-                    </li>
-                    <li>
-                        <a className="nav-link text-light mx-2" href="" onClick={() => navigate("/login")}>Login</a>
-                    </li>
-                    <li>
-                        <a className="nav-link text-light mx-2" href="" onClick={() => navigate("/register")}>Register</a>
-                    </li>
-                </ul>
+                    <ul className="navbar-nav me-auto mb-lg-0 mx-2">
+                        <li className="nav-item">
+                            <a className="nav-link text-light mx-2" href="" onClick={() => navigate("/")}>Home</a>
+                        </li>
+                        {isAuth ?
+                            <div>
+                                <li>
+                                    <a className="nav-link text-light mx-2" href="" onClick={logout}>Logout</a>
+                                </li>
+                            </div>
+                        :
+                            <>
+                                <li>
+                                    <a className="nav-link text-light mx-2" href="" onClick={() => navigate("/login")}>Login</a>
+                                </li>
+                                <li>
+                                    <a className="nav-link text-light mx-2" href="" onClick={() => navigate("/register")}>Register</a>
+                                </li>
+                            </>
+                        }
+                    </ul>
+                    {(isAuth && user) ?
+                        <>
+                            <a className="text-decoration-none" onClick={() => navigate("/profile")} href="">
+                                <p className="text-light me-4 mb-lg-0 h5"><b>{user.username}</b></p>
+                            </a>
+                            <img src={`/users/${user.profile ? user.profile : "default.png"}`} height="50" width="50"/>
+                        </>
+                    :
+                        <></>
+                    }
                 </div>
             </div>
         </nav>

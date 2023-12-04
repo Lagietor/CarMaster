@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 function CarCard (props) {
     const navigate = useNavigate();
-    console.log(props.car);
 
     return (
         <div key={props.id}>

@@ -13,7 +13,6 @@ function CarDetails() {
             try {
                 const { data } = await axios.get(`http://localhost:8080/car/${id}`);
                 setCar(data);
-                console.log(data);
             } catch (e) {
                 console.log("error " + e)
             }
@@ -32,7 +31,7 @@ function CarDetails() {
                             <p className="h3 text-end text-light">{car.company + " " + car.model}</p>
                             <p className="h3 text-end text-primary">Price: {car.price}$</p>
                             <p className="h3 text-end text-light">State: {car.state}</p>
-                            <p className="h5 text-end text-light mt-5"><PersonFill color="#E19898" className="me-2"/>{car.user.nickname}</p>
+                            <p className="h5 text-end text-light mt-5"><PersonFill color="#E19898" className="me-2"/>{car.user.username}</p>
                             <p className="h5 text-end text-light"><TelephoneFill color="#E19898" className="me-2"/>+48 {car.user.phoneNumber}</p>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
-package App.DTO;
+package App.classes;
 
-public class UserDTO {
+public class RegisterRequest {
     private Integer id;
     private String name;
     private String lastname;
@@ -8,9 +8,9 @@ public class UserDTO {
     private String email;
     private String username;
     private String password;
-    private String profile;
+    private String role;
 
-    public UserDTO(Integer id, String name, String lastname, String phoneNumber, String email, String username, String password, String profile) {
+    public RegisterRequest(Integer id, String name, String lastname, String phoneNumber, String email, String username, String password, String role) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -18,15 +18,11 @@ public class UserDTO {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.profile = profile;
-    }
-    
-    public Integer getId() {
-        return this.id;
+        this.role = role;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Integer getId() {
+        return this.id;
     }
 
     public String getName() {
@@ -77,11 +73,11 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getProfile() {
-        return this.profile;
+    public String getRole() {
+        return this.role;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
