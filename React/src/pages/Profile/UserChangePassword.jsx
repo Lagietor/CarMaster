@@ -19,7 +19,7 @@ function UserChangePassword() {
 
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
-    const { isAuth, user } = useUser();
+    const { user } = useUser();
 
     useEffect(() => {
         if (window.localStorage.getItem("authToken") == null) {
@@ -54,7 +54,7 @@ function UserChangePassword() {
     function changePassword(formData) {
         try {
             console.log(user.id);
-            axios.put(`http://localhost:8080/user/changePassword/${user.id}`, formData);
+            axios.put(`http://localhost:8080/user/changePassword/${user.id}`, formData.password);
         } catch (error) {
             console.log("error: " + error);
         }

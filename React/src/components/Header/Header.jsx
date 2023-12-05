@@ -4,7 +4,7 @@ import { useUser } from "../../customHooks/useUser";
 
 function Header (props) {
     const navigate = useNavigate();
-    const { user, isAuth } = useUser();
+    const { user } = useUser();
 
     function logout() {
         window.localStorage.removeItem("authToken");
@@ -25,7 +25,7 @@ function Header (props) {
                         <li className="nav-item">
                             <a className="nav-link text-light mx-2" href="" onClick={() => navigate("/")}>Home</a>
                         </li>
-                        {isAuth ?
+                        {user ?
                             <div>
                                 <li>
                                     <a className="nav-link text-light mx-2" href="" onClick={logout}>Logout</a>
@@ -42,7 +42,7 @@ function Header (props) {
                             </>
                         }
                     </ul>
-                    {(isAuth && user) ?
+                    {user ?
                         <>
                             <a className="text-decoration-none" onClick={() => navigate("/profile")} href="">
                                 <p className="text-light me-4 mb-lg-0 h5"><b>{user.username}</b></p>

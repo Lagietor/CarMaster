@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
-import { Check2, XLg } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../customHooks/useUser";
 import axios from "axios";
 
 function UserProfileEdit() {
-    const { isAuth, user } = useUser();
-
+    const { user } = useUser();
+    const [ image, setImage ] = useState(null);
+    
     const [formData, setFormData] = useState({
         name: "",
         lastname: "",
         phoneNumber: "",
         username: "",
+        profile: ""
     });
 
     useEffect(() => {
@@ -27,6 +28,7 @@ function UserProfileEdit() {
                 lastname: user.lastname,
                 phoneNumber: user.phoneNumber,
                 username: user.username,
+                profile: user.profile
             });
         }
     }, [user])
@@ -38,12 +40,20 @@ function UserProfileEdit() {
         setFormData({...formData, [e.target.name]: e.target.value});
     }
 
+    function handleImage(e) {
+        setFormData({...formData, profile: e.target.files[0].name});
+        setImage(e.target.files[0])
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
 
         try {
             validate((newErrors) => {
                 if (newErrors.length === 0) {
+                    if (image) {
+                        uploadImage();
+                    }
                     updateUser(formData);
                     navigate("/profile");
                     location.reload();
@@ -57,6 +67,23 @@ function UserProfileEdit() {
     function updateUser(formData) {
         try {
             axios.put(`http://localhost:8080/user/edit/${user.id}`, formData);
+        } catch (error) {
+            console.log("error: " + error);
+        }
+    }
+
+    function uploadImage() {
+        const imageData = new FormData();
+        imageData.append('file', image);
+
+        console.log(imageData);
+
+        try {
+            axios.put(`http://localhost:8080/user/uploadImage/${user.id}`, imageData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
         } catch (error) {
             console.log("error: " + error);
         }
@@ -133,6 +160,8 @@ function UserProfileEdit() {
                             <input type="text" className="form-control bg-secondary border-secondary text-light" name="phoneNumber" onChange={handleChange} placeholder="123456789" value={formData.phoneNumber} />
                             <p className="text-light h5 mt-4">Username</p>
                             <input type="text" className="form-control bg-secondary border-secondary text-light" name="username" onChange={handleChange} placeholder="Username" value={formData.username} />
+                            <p className="text-light h5 mt-4">Profile</p>
+                            <input type="file" className="custom-file-input bg-secondary text-light rounded" name="profile" onChange={handleImage} />
                             <div className="text-center">
                                 <input type="submit" className="btn btn-primary btn-lg mt-4" value="Submit" />
                             </div>

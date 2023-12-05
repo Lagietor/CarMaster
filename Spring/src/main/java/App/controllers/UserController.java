@@ -1,8 +1,10 @@
 package App.controllers;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,11 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import App.entities.User;
 
 import App.repositories.UserRepository;
+import io.jsonwebtoken.io.IOException;
 
 @CrossOrigin(origins="http://localhost:8080")
 @RestController
@@ -27,6 +32,9 @@ public class UserController {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${file.upload.user.directory}")
+    private String uploadDirectory;
 
     public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -69,13 +77,39 @@ public class UserController {
     }
 
     @PutMapping("changePassword/{userId}")
-    public ResponseEntity<?> changePassword(@RequestBody User updatedPassword, @PathVariable("userId") Integer id) {
+    public ResponseEntity<?> changePassword(@RequestBody String updatedPassword, @PathVariable("userId") Integer id) {
         User user = this.userRepository.findById(id).orElseThrow();
-        user.setPassword(this.passwordEncoder.encode(updatedPassword.getPassword()));
+        user.setPassword(this.passwordEncoder.encode(updatedPassword));
 
         userRepository.save(user);
 
         return ResponseEntity.ok("Password was succesfuly updated");
+    }
+
+    @PutMapping("uploadImage/{userId}")
+    public ResponseEntity<?> uploadImage(@RequestParam MultipartFile file, @PathVariable("userId") Integer id) throws IllegalStateException, java.io.IOException {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Plik jest pusty");
+        }
+
+        User user = this.userRepository.findById(id).orElseThrow();
+
+        try {
+            long currentTime = System.currentTimeMillis();
+
+            String filePath = uploadDirectory + File.separator + currentTime + "-" + file.getOriginalFilename();
+            String fileName = currentTime + "-" + file.getOriginalFilename();
+
+            file.transferTo(new File(filePath));
+            user.setProfile(fileName);
+
+            this.userRepository.save(user);
+
+            return ResponseEntity.ok("Image was succesfuly uploaded");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error appeared during uploading image");
+        }
     }
 
     @DeleteMapping("{userId}")

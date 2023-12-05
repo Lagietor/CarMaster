@@ -10,6 +10,8 @@ import NotFound from "./pages/NotFound";
 import UserProfile from "./pages/Profile/UserProfile";
 import UserProfileEdit from "./pages/Profile/UserProfileEdit";
 import UserChangePassword from "./pages/Profile/UserChangePassword";
+import EditCar from "./pages/Profile/Cars/EditCar";
+import AddCar from "./pages/Profile/Cars/AddCar";
 
 function App() {
 	return (
@@ -22,6 +24,8 @@ function App() {
 				<Route exact path="/profile" element={<UserProfile />} />
 				<Route exact path="/profile/edit" element={<UserProfileEdit />} />
 				<Route exact path="/profile/changePassword" element={<UserChangePassword />} />
+				<Route exact path="/profile/addCar" element={<AddCar />} />
+				<Route exact path="/profile/editCar/:id" element={<EditCar />} />
 				<Route exact path="/car/:id" element={<CarDetails />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>

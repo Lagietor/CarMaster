@@ -1,10 +1,13 @@
 package App.controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import App.DTO.CarDTO;
 import App.classes.CarFilter;
@@ -33,6 +37,9 @@ public class CarController {
     private final CarRepository carRepository;
     private final UserRepository userRepository;
     private final CarService carService;
+
+    @Value("${file.upload.car.directory}")
+    private String uploadDirectory;
 
     public CarController(CarRepository carRepository, UserRepository userRepository, CarService carService) {
         this.carRepository = carRepository;
@@ -87,11 +94,21 @@ public class CarController {
         return ResponseEntity.ok(this.carRepository.getAllCompanies());
     }
 
-    @PostMapping
-    public ResponseEntity<?> createCar(@RequestBody Car car) {
+    @PostMapping("/add")
+    public ResponseEntity<?> createCar(@RequestBody Car car, @RequestParam(name = "image") MultipartFile file) throws IllegalStateException, IOException {
         User user = car.getUser();
         if (user == null || !userRepository.existsById(user.getId())) {
             return new ResponseEntity<>("There is no user with this id", HttpStatus.NOT_FOUND);
+        }
+
+        if (file != null) {
+            long currentTime = System.currentTimeMillis();
+
+            String filePath = uploadDirectory + File.separator + currentTime + "-" + file.getOriginalFilename();
+            String fileName = currentTime + "-" + file.getOriginalFilename();
+
+            file.transferTo(new File(filePath));
+            car.setImage(fileName);
         }
 
         carRepository.save(car);
