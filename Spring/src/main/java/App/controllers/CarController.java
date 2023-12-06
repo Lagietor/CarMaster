@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import App.DTO.CarDTO;
+import App.classes.CarRequest;
 import App.classes.CarFilter;
 import App.classes.PageResponse;
 import App.entities.Car;
@@ -29,6 +30,9 @@ import App.entities.User;
 import App.repositories.CarRepository;
 import App.repositories.UserRepository;
 import App.services.CarService;
+
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -94,28 +98,70 @@ public class CarController {
         return ResponseEntity.ok(this.carRepository.getAllCompanies());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> createCar(@RequestBody Car car, @RequestParam(name = "image") MultipartFile file) throws IllegalStateException, IOException {
-        User user = car.getUser();
-        if (user == null || !userRepository.existsById(user.getId())) {
-            return new ResponseEntity<>("There is no user with this id", HttpStatus.NOT_FOUND);
-        }
+    @PostMapping("add")
+    public ResponseEntity<?> createCar(@RequestBody CarRequest request) {
+        User user = this.userRepository.findById(request.getUserId()).orElseThrow();
 
-        if (file != null) {
-            long currentTime = System.currentTimeMillis();
-
-            String filePath = uploadDirectory + File.separator + currentTime + "-" + file.getOriginalFilename();
-            String fileName = currentTime + "-" + file.getOriginalFilename();
-
-            file.transferTo(new File(filePath));
-            car.setImage(fileName);
-        }
+        Car car = new Car();
+        car.setColor(request.getColor());
+        car.setCompany(request.getCompany());
+        car.setModel(request.getModel());
+        car.setDescription(request.getDescription());
+        car.setFuelType(request.getFuelType());
+        car.setHorsePower(request.getHorsePower());
+        car.setNumOfDoors(request.getNumOfDoors());
+        car.setState(request.getState());
+        car.setPrice(request.getPrice());
+        car.setWeight(request.getWeight());
+        car.setUser(user);
 
         carRepository.save(car);
-        return new ResponseEntity<>("Car was added to database", HttpStatus.CREATED);
+        return new ResponseEntity<>(car, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("{carId}")
+    @PutMapping("uploadImage/{carId}")
+    public ResponseEntity<?> uploadImage(@RequestParam MultipartFile image, @PathVariable("carId") Integer id) throws IllegalStateException, IOException {
+        if (image.isEmpty()) {
+            return ResponseEntity.badRequest().body("File is empty");
+        }
+
+        Car car = this.carRepository.findById(id).orElseThrow();
+
+        long currentTime = System.currentTimeMillis();
+
+        String filePath = uploadDirectory + File.separator + currentTime + "-" + image.getOriginalFilename();
+        String fileName = currentTime + "-" + image.getOriginalFilename();
+
+        image.transferTo(new File(filePath));
+        car.setImage(fileName);
+        carRepository.save(car);
+        
+        return ResponseEntity.ok("car image was successfuly uploaded");
+    }
+
+    @PutMapping("edit/{carId}")
+    public ResponseEntity<?> editCar(@PathVariable("carId") Integer id, @RequestBody CarRequest request) {
+        User user = this.userRepository.findById(request.getUserId()).orElseThrow();
+        
+        Car car = this.carRepository.findById(id).orElseThrow();
+        car.setColor(request.getColor());
+        car.setCompany(request.getCompany());
+        car.setModel(request.getModel());
+        car.setDescription(request.getDescription());
+        car.setFuelType(request.getFuelType());
+        car.setHorsePower(request.getHorsePower());
+        car.setNumOfDoors(request.getNumOfDoors());
+        car.setState(request.getState());
+        car.setPrice(request.getPrice());
+        car.setWeight(request.getWeight());
+        car.setUser(user);
+
+        this.carRepository.save(car);
+        return ResponseEntity.ok(car);
+    }
+    
+
+    @DeleteMapping("delete/{carId}")
     public ResponseEntity<?> deleteCar(@PathVariable("carId") Integer id) {
         if (!this.carRepository.existsById(id)) {
             return new ResponseEntity<>("There is no car with this Id", HttpStatus.NOT_FOUND);

@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CarForm.css";
 import axios from "axios";
+import { useUser } from "../../../customHooks/useUser";
 
 function AddCar(props) {
     const navigate = useNavigate();
+    const { user } = useUser();
 
     useEffect(() => {
         if (window.localStorage.getItem("authToken") == null) {
@@ -23,12 +25,18 @@ function AddCar(props) {
         weight: "",
         color: "",
         price: "",
-        image: ""
-
+        userId: ""
     });
+
+    useEffect(() => {
+        if (user) {
+            setFormData({...formData, userId: user.id})
+        }
+    }, [user])
 
     const [errors, setErrors] = useState([]);
     const [image, setImage] = useState(null);
+
 
     function handleChange(e) {
         setFormData({...formData, [e.target.name]: e.target.value});
@@ -44,9 +52,13 @@ function AddCar(props) {
         try {
             validate((newErrors) => {
                 if (newErrors.length === 0) {
-                    addCar(formData);
-                    // navigate("/profile");
-                    // location.reload();
+                    addCar((car) => {
+                        if (image) {
+                            uploadImage(car);
+                        }
+                        navigate("/profile");
+                        location.reload();
+                    });
                 }
             });
         } catch (error) {
@@ -144,41 +156,35 @@ function AddCar(props) {
                 newErrors.push("Field price is empty");
             }
         } else {
-            setErrors((prevErrors) => prevErrors.filter((error) => error !== "Field color is empty"));
+            setErrors((prevErrors) => prevErrors.filter((error) => error !== "Field price is empty"));
         }
 
         callback(newErrors);
     }
 
-    function addCar() {
-        let imageData = null;
-
-        if (image) {
-            imageData = new FormData();
-            imageData.append('file', formData.image);
-        }
-
+    const addCar = async (callback) => {
         try {
-            axios.post(`http://localhost:8080/car/add?image=${imageData}`, formData);
+            const { data } = await axios.post(`http://localhost:8080/car/add`, formData);
+            callback(data);
         } catch (error) {
             console.log("error: " + error);
         }
     }
 
-    // function uploadImage() {
-    //     const imageData = new FormData();
-    //     imageData.append('file', formData.image);
+    const uploadImage = async (car) => {
+        const formData = new FormData();
+        formData.append("image", image);
 
-    //     try {
-    //         // axios.put(`http://localhost:8080/user/uploadImage/${user.id}`, imageData, {
-    //         //     headers: {
-    //         //         'Content-Type': 'multipart/form-data',
-    //         //     },
-    //         // });
-    //     } catch (error) {
-    //         console.log("error: " + error);
-    //     }
-    // }
+        try {
+            axios.put(`http://localhost:8080/car/uploadImage/${car.id}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            });
+        } catch (error) {
+            console.log("error: " + error);
+        }
+    }
 
     return (
         <div className="container">
@@ -258,7 +264,7 @@ function AddCar(props) {
                                 2
                             </label>
                         </div>
-                        <p className="text-light h5 mt-4">Weight</p>
+                        <p className="text-light h5 mt-4">Weight (kg)</p>
                         <input type="text" className="form-control bg-secondary border-secondary text-light" name="weight" onChange={handleChange} placeholder="1600" />
                         <p className="text-light h5 mt-4">Color</p>
                         <input type="text" className="form-control bg-secondary border-secondary text-light" name="color" onChange={handleChange} placeholder="red" />

@@ -76,12 +76,10 @@ function UserProfileEdit() {
         const imageData = new FormData();
         imageData.append('file', image);
 
-        console.log(imageData);
-
         try {
             axios.put(`http://localhost:8080/user/uploadImage/${user.id}`, imageData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    "Content-Type": "multipart/form-data",
                 },
             });
         } catch (error) {

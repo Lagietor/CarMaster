@@ -89,7 +89,7 @@ public class UserController {
     @PutMapping("uploadImage/{userId}")
     public ResponseEntity<?> uploadImage(@RequestParam MultipartFile file, @PathVariable("userId") Integer id) throws IllegalStateException, java.io.IOException {
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("Plik jest pusty");
+            return ResponseEntity.badRequest().body("File is empty");
         }
 
         User user = this.userRepository.findById(id).orElseThrow();

@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../customHooks/useUser";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Eye, Pencil, Plus, Trash3 } from "react-bootstrap-icons";
+import axios from "axios";
 
 function UserProfile(props) {
     const navigate = useNavigate();
@@ -10,9 +11,28 @@ function UserProfile(props) {
         if (window.localStorage.getItem("authToken") == null) {
             navigate("/");
         }
-    })
+    }, []);
 
     const { user } = useUser();
+    const [userState, setUserState] = useState(null);
+
+    useEffect(() => {
+        if (user) {
+            setUserState(user);
+        }
+    }, [user]);
+
+    const removeCar = async (carId) => {
+        try {
+            await axios.delete(`http://localhost:8080/car/delete/${carId}`);
+            setUserState(prevUser => ({
+                ...prevUser,
+                cars: prevUser.cars.filter(car => car.id !== carId)
+            }));
+        } catch (error) {
+            console.log("error: " + error);
+        }
+    }
 
     return (
         <div className="container">
@@ -55,10 +75,10 @@ function UserProfile(props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {user.cars.map((car, index) => (
+                                    {userState && userState.cars.map((car, index) => (
                                         <tr key={index}>
                                             <th scope="col" className="align-middle">{index}</th>
-                                            <td><img src={"cars/" + car.image} className="rounded" width="60" height="60" alt="car Image"></img></td>
+                                            <td><img src={"cars/" + car.image} className="rounded" width="90" height="60" alt="car Image"></img></td>
                                             <td className="align-middle">{car.company}</td>
                                             <td className="align-middle">{car.model}</td>
                                             <td className="align-middle">{car.price}$</td>
@@ -66,7 +86,7 @@ function UserProfile(props) {
                                                 <div className="d-flex inline">
                                                     <button className="btn btn-sm btn-primary align-middle me-2" onClick={() => navigate(`/car/${car.id}`)}><Eye /></button>
                                                     <button className="btn btn-sm btn-primary align-middle me-2" onClick={() => navigate(`editCar/${car.id}`)}><Pencil /></button>
-                                                    <button className="btn btn-sm btn-danger align-middle"><Trash3 /></button>
+                                                    <button className="btn btn-sm btn-danger align-middle" onClick={() => removeCar(car.id)} ><Trash3 /></button>
                                                 </div>
                                             </td>
                                         </tr>
